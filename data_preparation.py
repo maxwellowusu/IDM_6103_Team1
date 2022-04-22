@@ -31,6 +31,7 @@
 
 #%% 
 # !pip install census
+
 # %%
 
 # import libraries
@@ -44,8 +45,6 @@ import seaborn as sns
 sns.set_theme(style='darkgrid')
 
 #%%
-
-#%%
 # Download street from open data DC
 
 bus_stops = gpd.read_file('https://opendata.arcgis.com/datasets/e85b5321a5a84ff9af56fd614dab81b3_53.geojson')
@@ -53,6 +52,7 @@ print(bus_stops.shape)
 bus_stops.head(2)
 
 #%%
+# Plot bus stops 
 ax = bus_stops.plot(figsize=(10, 10), alpha=0.5, edgecolor='k')
 ctx.add_basemap(ax, crs=bus_stops.crs)
 
@@ -64,6 +64,10 @@ public_schools = gpd.read_file('https://opendata.arcgis.com/datasets/4ac321b2d40
 print(public_schools.shape)
 public_schools.head(2)
 
+# Plot public schools 
+ax = public_schools.plot(figsize=(10, 10), alpha=0.5, edgecolor='k')
+ctx.add_basemap(ax, crs=public_schools.crs)
+
 #%%
 # Download trees from open data DC
 
@@ -71,20 +75,32 @@ trees = gpd.read_file('https://opendata.arcgis.com/datasets/f6c3c04113944f23a799
 print(trees.shape)
 trees.head(2)
 
+# Plot trees 
+ax = trees.plot(figsize=(10, 10), alpha=0.5, edgecolor='k')
+ctx.add_basemap(ax, crs=trees.crs)
 # Download metro station from open data DC
 
 metro_station = gpd.read_file('https://opendata.arcgis.com/datasets/ab5661e1a4d74a338ee51cd9533ac787_50.geojson')
 print(metro_station.shape)
 metro_station.head(2)
 
+# Plot metro station 
+ax = metro_station.plot(figsize=(10, 10), alpha=0.5, edgecolor='k')
+ctx.add_basemap(ax, crs=metro_station.crs)
+
+#%%
 # # Download parks and recreation from open data DC
 
 parks = gpd.read_file('https://opendata.arcgis.com/datasets/287eaa2ecbff4d699762bbc6795ffdca_9.geojson')
 print(parks.shape)
 parks.head(2)
 
+# Plot metro station 
+ax = parks.plot(figsize=(10, 10), alpha=0.5, edgecolor='k')
+ctx.add_basemap(ax, crs=parks.crs)
 
 ############################ end of GIS data download ###############
+
 #%%
 # Download census data 
 session = Census("808b8bdd29d3424881a13740265bdf2c3d7b0980") # Please get a Census API key from https://api.census.gov/data/key_signup.html
@@ -118,6 +134,7 @@ dc_df.head()
 
 dc_shp = gpd.read_file('./tl_2017_11_tract/tl_2017_11_tract.shp')
 dc_shp.to_crs("EPSG:32618", inplace=True)
+dc_shp.plot()
 # remove unneeded columns
 dc_shp.drop(columns=['NAMELSAD','MTFCC','FUNCSTAT','ALAND','AWATER','INTPTLAT','INTPTLON'], inplace=True)
 dc_shp.head(2)
@@ -134,9 +151,6 @@ dc_df["GEOID"]
 dc_join = dc_shp.merge(right=dc_df, how='left',on='GEOID', validate='one_to_one')
 dc_join.head()
 
-
-# %%
-dc_join.plot()
 # %%
 
 # # Lets join the seleted infrastructure to the dataframe.
@@ -234,9 +248,9 @@ park.head()
 bus_sch_metro_trees_parks_merge = bus_sch_metro_trees_merge.merge(right=park, how='left',on='GEOID', validate='one_to_one')
 bus_sch_metro_trees_parks_merge.head()
 # %%
-outfile = 'dataset.geojson'
+outfile = './data/dataset.geojson'
 bus_sch_metro_trees_parks_merge.to_file(outfile, driver='GeoJSON')
 # %%
-output_csv = 'dataset.csv'
+output_csv = './data/dataset.csv'
 bus_sch_metro_trees_parks_merge.to_csv(output_csv, sep=',', header=True)
 # %%
