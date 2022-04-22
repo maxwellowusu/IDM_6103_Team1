@@ -73,6 +73,232 @@ df.plot()
 
 
 #%%
+#%%[markdown]
+## Smart Question 3
+# Is there a relationship between distribution of infrastructure and socio-economic  and race groups?
+#%%[markdown]
+# In order to do some data process, define a new dataframe. 
+# Calculate the ration of white_population to Total Population, and add it to a new column named race_ratio. 
+#%%
+df3 = df
+df3["race_ratio"]=df3[["White_population","Population"]].apply(lambda x:x["White_population"]/x["Population"],axis=1)
+df3.head()
+#%%
+# Build regression model between income and races: 
+import statsmodels.api as sm
+fit_income=sm.formula.ols('Household_income~race_ratio',data = df3).fit()
+print(fit_income.summary())
+#%%[markdown]
+# Null hypothesis: The coefficient of variables in regression model equals to 0.  
+# 
+# Alternative hypothesis: The coefficient of variables in regression model does not equal to 0. 
+# 
+# Take $\alpha=0.05$, the p-values of race ratio is less than 0.05, we reject the null hypothesis in favor of alternative hypothesis. The race ratio is negative ralated to household income. That as the white population increse, the household income would decrease. 
+
+#%%
+# Build regression model between bus_stops and races: 
+import statsmodels.api as sm
+fit_bus=sm.formula.ols('bus_stops~race_ratio',data = df3).fit()
+print(fit_bus.summary())
+#%%[markdown]
+# Null hypothesis: The coefficient of variables in regression model equals to 0.  
+# 
+# Alternative hypothesis: The coefficient of variables in regression model does not equal to 0. 
+# 
+# Take $\alpha=0.05$, the p-values of race ratio is higher than 0.05, we fail to reject the null hypothesis. The race ratio would not have statistical significant effect on bus stops. 
+#%%
+# Build regression model between public_school and races: 
+import statsmodels.api as sm
+fit_school=sm.formula.ols('public_school~race_ratio',data = df3).fit()
+print(fit_school.summary())
+#%%[markdown]
+# Null hypothesis: The coefficient of variables in regression model equals to 0.  
+# 
+# Alternative hypothesis: The coefficient of variables in regression model does not equal to 0. 
+# 
+# Take $\alpha=0.05$, the p-values of race ratio is higher than 0.05, we fail to reject the null hypothesis. The race ratio would not have statistical significant effect on the number of public schools. 
+#%%
+# Build regression model between metro_station and races: 
+import statsmodels.api as sm
+fit_metro=sm.formula.ols('metro_station~race_ratio',data = df3).fit()
+print(fit_metro.summary())
+#%%[markdown]
+# Null hypothesis: The coefficient of variables in regression model equals to 0.  
+# 
+# Alternative hypothesis: The coefficient of variables in regression model does not equal to 0. 
+# 
+# Take $\alpha=0.05$, the p-values of race ratio is less than 0.05, we reject the null hypothesis in favor of alternative hypothesis. The race ratio is positive ralated to metro station. That as the white population increse, the metro station would also increse. 
+#%%
+# Build regression model between tree and races: 
+import statsmodels.api as sm
+fit_tree=sm.formula.ols('tree~race_ratio',data = df3).fit()
+print(fit_tree.summary())
+#%%[markdown]
+# Null hypothesis: The coefficient of variables in regression model equals to 0.  
+# 
+# Alternative hypothesis: The coefficient of variables in regression model does not equal to 0. 
+# 
+# Take $\alpha=0.05$, the p-values of race ratio is higher than 0.05, we fail to reject the null hypothesis. The race ratio would not have statistical significant effect on the number of trees. 
+
+#%%
+# Build regression model between park and races: 
+import statsmodels.api as sm
+fit_park=sm.formula.ols('park~race_ratio',data = df3).fit()
+print(fit_park.summary())
+#%%[markdown]
+# Null hypothesis: The coefficient of variables in regression model equals to 0.  
+# 
+# Alternative hypothesis: The coefficient of variables in regression model does not equal to 0. 
+# 
+# Take $\alpha=0.05$, the p-values of race ratio is higher than 0.05, we fail to reject the null hypothesis. The race ratio would not have statistical significant effect on the number of parks. 
+
+#%%[markdown]
+## Smart Question 4
+# How people of different economic status are affected by this infrastructure development?
+#%%
+# In order to do some data process, define a new dataframe. 
+df4 = df
+#%%[markdown]
+# Before inferential analysis, we do some descriptive analysis. 
+#%%
+print(df4.info())
+
+countsschool = df4['public_school'].value_counts()
+plt.pie(countsschool, labels = countsschool.index, startangle = 90,
+        counterclock = False, autopct='%.1f%%')
+plt.axis('square')
+plt.legend()
+plt.title('Number of Public School')
+plt.show()
+
+countsmetro = df4['metro_station'].value_counts()
+plt.pie(countsmetro, labels = countsmetro.index, startangle = 90,
+        counterclock = False, autopct='%.1f%%')
+plt.axis('square')
+plt.legend()
+plt.title('Number of Metro Stations')
+plt.show()
+
+countspark = df4['park'].value_counts()
+plt.pie(countspark, labels = countspark.index, startangle = 90,
+        counterclock = False, autopct='%.1f%%')
+plt.axis('square')
+plt.legend()
+plt.title('Number of Parks')
+plt.show()
+
+#%%[markdown]
+# From the plots above, we can see that facilities are not built equally in each region. 
+
+#%%
+ax = sns.distplot(df4['Household_income'])
+ax.set_xlabel("Household Income", fontsize=20)
+ax.set_ylabel("Density", fontsize=20)
+plt.title('Density of Household Income')
+plt.show()
+
+
+kind='reg' 
+ax = sns.jointplot(x='bus_stops', y='Household_income', data=df4, kind='reg', height=5)
+ax.set_axis_labels('Bus Stops', 'Household Income', fontsize=20)  
+plt.show()
+
+kind='reg' 
+ax = sns.jointplot(x='public_school', y='Household_income', data=df4, kind='reg', height=5)
+ax.set_axis_labels('Public Schools', 'Household Income', fontsize=20)  
+plt.show()
+
+# Since the range of public school is only includes 1, 2, 3, 4, we decide to draw a boxplot which is more readable. 
+ax = sns.boxplot(x='public_school', y='Household_income', data=df4)
+ax.set_xlabel('Public Schools', fontsize=20)
+ax.set_ylabel('Household Income', fontsize=20)
+plt.xticks(fontsize=20)
+plt.yticks(fontsize=20)
+
+kind='reg' 
+ax = sns.jointplot(x='metro_station', y='Household_income', data=df4, kind='reg', height=5)
+ax.set_axis_labels('Metro Stations', 'Household Income', fontsize=20)  
+plt.show()
+
+kind='reg' 
+ax = sns.jointplot(x='tree', y='Household_income', data=df4, kind='reg', height=5)
+ax.set_axis_labels('Trees', 'Household Income', fontsize=20)  
+plt.show()
+
+kind='reg' 
+ax = sns.jointplot(x='park', y='Household_income', data=df4, kind='reg', height=5)
+ax.set_axis_labels('Praks', 'Household Income', fontsize=20)  
+plt.show()
+
+#%%[markdown]
+# Joint distribution plots above shows that bus stop would have positive effect on household income, and metro station, tree and park would be negative related to household income. 
+# 
+# Then we build a model to see the coefficient. 
+
+#%%
+import statsmodels.api as sm
+# %%
+fit41=sm.formula.ols('Household_income~bus_stops+public_school+metro_station+tree+park',data = df4).fit()
+print(fit41.summary())
+
+# %%[markdown]
+# Null hypothesis: The coefficient of variables in regression model equals to 0.  
+# 
+# Alternative hypothesis: The coefficient of variables in regression model does not equal to 0. 
+#
+# Here we can see from the coefficients that metro_station, tree and park are negative related to household_income, and bus_stops and public_school are positive related to household_income. 
+# 
+# However, take $\alpha=0.05$, the p-values of all variables are higher than 0.05, we fail to reject the null hypothesis. In this regression model analysis, all variables have no statistical significant effect on household income.
+#%%[markdown]
+# Also from the boxplot about Household income vs public schools, we perform a ANOVA on it in order to learn whether there is any difference between areas whith different number of public schools. 
+# 
+# Before perform the ANOVA, we need to check if these four groups satisfy the normality and homoscedasticity. 
+#%%
+# Divide into four groups. 
+bool1 = df4['public_school']==1
+bool2 = df4['public_school']==2
+bool3 = df4['public_school']==3
+bool4 = df4['public_school']==4
+
+dfsch1 = df4[bool1]
+dfsch2 = df4[bool2]
+dfsch3 = df4[bool3]
+dfsch4 = df4[bool4]
+# %%
+sm.qqplot(dfsch1['Household_income'], fit=True, line='45')
+plt.show()
+
+sm.qqplot(dfsch2['Household_income'], fit=True, line='45')
+plt.show()
+
+sm.qqplot(dfsch3['Household_income'], fit=True, line='45')
+plt.show()
+
+sm.qqplot(dfsch4['Household_income'], fit=True, line='45')
+plt.show()
+#%%[markdown]
+# From the qqplot above, most points are distributed aroud the red line, thus we assume they satisfy the normality. 
+# %%
+from scipy.stats import levene
+p = levene(dfsch1['Household_income'],dfsch2['Household_income'],dfsch3['Household_income'],dfsch4['Household_income'])
+print(p)
+#%%[markdown]
+# Null hypothesis: The variance for each groups is the same.   
+# 
+# Alternative hypothesis: At least one group has different variance with other groups. 
+#
+# Take $\alpha=0.05$, in the ANOVA table above, p-value is higher than 0.05. In that case, we fail to reject the null hypothesis. I draw the conclusion that they satisfy the homoscedasticity. Then we can do the ANOVA. 
+# %%
+print('ANOVA on Public_School')
+anovsch = ols('Household_income~C(public_school)',data=df4).fit()
+anovschin = anova_lm(anovsch, typ = 2)
+print(anovschin)
+#%%[markdown]
+# Null hypothesis: The mean income for each groups is the same.   
+# 
+# Alternative hypothesis: At least one group has different mean income with other groups. 
+#
+# Take $\alpha=0.05$, in the ANOVA table above, p-value is higher than 0.05. In that case, we fail to reject the null hypothesis. I draw the conclusion that the number of public school would not have statistical significant effect on househould income. 
 
 
 
