@@ -155,6 +155,7 @@ y = df1['Race']
 from sklearn.model_selection import train_test_split
 x_train, x_test, y_train, y_test = train_test_split(x, y, random_state=1 )
 
+# logistric regression
 from sklearn.linear_model import LogisticRegression
 
 logit = LogisticRegression()  # instantiate
@@ -172,6 +173,8 @@ df.plot(ax=axes, column='lg_pred', \
 plt.show()
 #%%
 
+#%%
+# Radnom forest
 from sklearn.ensemble import RandomForestClassifier
 rf = RandomForestClassifier(n_estimators=1000, random_state = 0)
 
