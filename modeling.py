@@ -64,12 +64,60 @@ from scipy.stats import chi2_contingency, chisquare
 #%%
 # read geojosn data with geopandas
 
-df = gpd.read_file('./data/dataset.geojson')
+df = gpd.read_file('./data/dataset.csv')
 print(df.head())
 df.fillna(0)
+#%%
+#This is only for Evelyn since some of the packages for the geojson are not working for me 
+df = pd.read_csv('./data/dataset.csv') #I am using the csv file that's why I commented the other one
+print(df.head())
+df.fillna(0)
+df.shape # 179 rows and 20 columns
+print(df.columns.values) # since I had to use the csv file I wanted to verify the variables
+df.dtypes
+df.describe
 # %%
 
 df.plot()
+
+#%%
+#EDA SMART QUESTION 1
+plt.style.use('ggplot')
+#Plotting Feature Distributions
+df.bus_stops.describe()
+df['bus_stops'].value_counts() \
+   .plot(kind = 'bar', title = 'trying out')
+#%%   
+#Scatterplot
+df.plot(kind='scatter',
+        x='bus_stops',
+        y= 'Black_population',
+        title='Bus stops where Black population is found')
+plt.show()
+
+df.plot(kind='scatter',
+        x='bus_stops',
+        y= 'White_population',
+        title='Bus stops where White population is found')
+plt.show()
+#%%  
+#sns.scatterplot(x='White_population',
+#        y= 'Black_population',
+#        hue='bus_stops',
+#        data=df,
+#        title='Bus stops where Black population is found)
+        
+sns.pairplot(df, vars=['bus_stops', 'Black_population', 'White_population','public_school', 'metro_station'],
+             hue='Population')
+plot.show()
+
+#%% 
+#Looking at the correlation
+df_corr = df[['bus_stops', 'Black_population', 'White_population','public_school', 'metro_station']].dropna().corr()
+df_corr
+#%% 
+sns.heatmap(df_corr)
+
 
 #%% [markdown]
 # Is there segregation in public infrastructure investment in the DC?
