@@ -81,8 +81,9 @@ df.plot(ax=axes, column= 'bus_stops', scheme='NaturalBreaks', k=5, \
             cmap='YlOrRd', legend=True,
             legend_kwds={'loc': 'center left', 'bbox_to_anchor':(1,0.5),'interval': True},
          )
+plt.savefig('./output/bus_stops.jpeg') 
 plt.show()
-
+  
 #%%
 # Trees
 fig, axes = plt.subplots(figsize=(10, 10), sharex=True)  
@@ -91,8 +92,9 @@ df.plot(ax=axes, column= 'tree', scheme='NaturalBreaks', k=5, \
             cmap='YlOrRd', legend=True,
             legend_kwds={'loc': 'center left', 'bbox_to_anchor':(1,0.5),'interval': True},
          )
+plt.savefig('./output/trees.jpeg')   
 plt.show()
-
+ 
 #%%
 
 # Plot of aggregated infrastructure per census tract
@@ -110,56 +112,12 @@ def plot_infrastructure(variable, title, missing_data):
                legend_kwds={'loc': 'center left', 'bbox_to_anchor':(1,0.5),'interval': True},
                missing_kwds = missing_kwds
             )
+   outfile = f'./output/{variable}.jpeg'
+   plt.savefig(outfile)
    plt.show()
 
-
-#%%
-# Public schools
-plot_infrastructure('public_school', 'Public school counts per census tracts', 'No Public Schools')
-
-#%%
-# Metro stations
-plot_infrastructure('metro_station','Metro stations count per census tracts', 'No Metro Station')
-
-# plot Bus stops 
-fig, axes = plt.subplots(figsize=(10, 10), sharex=True)  
-axes.set_title('Bus stops counts per census tracts') 
-df.plot(ax=axes, column= 'bus_stops', scheme='NaturalBreaks', k=5, \
-            cmap='YlOrRd', legend=True,
-            legend_kwds={'loc': 'center left', 'bbox_to_anchor':(1,0.5),'interval': True},
-         )
-plt.show()
-
-#%%
-# Trees
-fig, axes = plt.subplots(figsize=(10, 10), sharex=True)  
-axes.set_title('Tree counts per census tract') 
-df.plot(ax=axes, column= 'tree', scheme='NaturalBreaks', k=5, \
-            cmap='YlOrRd', legend=True,
-            legend_kwds={'loc': 'center left', 'bbox_to_anchor':(1,0.5),'interval': True},
-         )
-plt.show()
-
-#%%
-
-# Plot of aggregated infrastructure per census tract
-
-def plot_infrastructure(variable, title, missing_data):
-   '''A function to plot infrastrucutre
-   param: variable and title in string
-   return a map'''
    
-   fig, axes = plt.subplots(figsize=(10, 10), sharex=True)  
-   axes.set_title(title) 
-   missing_kwds = dict(color='grey', label=missing_data)
-   df.plot(ax=axes, column= variable, scheme='NaturalBreaks', k=5, \
-               cmap='YlOrRd', legend=True,
-               legend_kwds={'loc': 'center left', 'bbox_to_anchor':(1,0.5),'interval': True},
-               missing_kwds = missing_kwds
-            )
-   plt.show()
-
-
+   return None
 #%%
 # Public schools
 plot_infrastructure('public_school', 'Public school counts per census tracts', 'No Public Schools')
@@ -167,13 +125,54 @@ plot_infrastructure('public_school', 'Public school counts per census tracts', '
 #%%
 # Metro stations
 plot_infrastructure('metro_station','Metro stations count per census tracts', 'No Metro Station')
-
-#%%
-
 
 #%%
 # Parks
 plot_infrastructure('park', 'Park counts per census track', 'No Parks' )
+
+#%%
+
+# fig, axes = plt.subplots(figsize=(10, 10), sharex=True) 
+fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2, figsize=(12, 10))
+ax1.set_title('Publich school') 
+missing_kwds = dict(color='grey', label='No Public Schools')
+df.plot(ax=ax1, column= 'public_school', scheme='NaturalBreaks', k=5, \
+            cmap='YlOrRd', legend=True,
+            legend_kwds={'loc': 'center left', 'bbox_to_anchor':(1,0.5),'interval': True},
+            missing_kwds = missing_kwds
+         )
+ 
+ax2.set_title('Bus Stops') 
+df.plot(ax=ax2, column= 'bus_stops', scheme='NaturalBreaks', k=5, \
+            cmap='YlOrRd', legend=True,
+            legend_kwds={'loc': 'center left', 'bbox_to_anchor':(1,0.5),'interval': True},
+            
+         )
+ 
+ax3.set_title('Metro Station') 
+missing_kwds = dict(color='grey', label='No Metro Station')
+df.plot(ax=ax3, column= 'metro_station', scheme='NaturalBreaks', k=5, \
+            cmap='YlOrRd', legend=True,
+            legend_kwds={'loc': 'center left', 'bbox_to_anchor':(1,0.5),'interval': True},
+            missing_kwds = missing_kwds
+         )
+
+ax4.set_title('Park') 
+missing_kwds = dict(color='grey', label='No Parks')
+df.plot(ax=ax4, column= 'park', scheme='NaturalBreaks', k=5, \
+            cmap='YlOrRd', legend=True,
+            legend_kwds={'loc': 'center left', 'bbox_to_anchor':(1,0.5),'interval': True},
+            missing_kwds = missing_kwds
+         )
+
+for ax in fig.get_axes():
+    ax.label_outer()
+plt.savefig('./output/infrasture.jpeg')
+
+#%%
+
+
+
 
 #%%
 # plot Census variables 
@@ -189,9 +188,21 @@ axes.set_title("White and Black/Africa American in DC")
 df.plot(ax=axes, column='Race', \
              cmap=plt.cm.get_cmap('Dark2', 2).reversed(), legend=True,
              )
+plt.savefig('./output/race.jpeg') 
 plt.show()
 
 # Visually there is seems to be clusters of race in DC. 
+
+#%%
+# Household income
+fig, axes = plt.subplots(figsize=(10, 10), sharex=True)  
+axes.set_title('Household Income') 
+df.plot(ax=axes, column= 'Household_income', scheme='NaturalBreaks', k=5, \
+            cmap='YlOrRd', legend=True,
+            legend_kwds={'loc': 'center left', 'bbox_to_anchor':(1,0.5),'interval': True},
+         )
+plt.savefig('./output/Household_income.jpeg') 
+plt.show()
 
 #%%
 # df.fillna(0)
