@@ -152,8 +152,8 @@ def check_p_val(p_val, alpha):
 xp = np.arange(df1.public_school.min(), df1.public_school.max(), 0.1)
 fit1 = stats.norm.pdf(xp, np.mean(df1.public_school), np.std(df1.public_school))
 plt.plot(xp, fit1, label='Normal Dist.', lw=3)
-plt.hist(df1.public_school, 50, density=True, label='Actual Data');
-plt.legend();
+plt.hist(df1.public_school, 50, density=True, label='Actual Data')
+plt.legend()
 #%%
 #testing distribution
 stat, p_val = normaltest(df1.public_school)
@@ -258,7 +258,7 @@ xt = np.arange(df1.tree.min(), df1.tree.max(), 0.1)
 fitt = stats.norm.pdf(xt, np.mean(df1.tree), np.std(df1.tree))
 plt.plot(xt, fitt, label='Normal Dist.', lw=3)
 plt.hist(df1.tree, 50, density=True, label='Actual Data');
-plt.legend();
+plt.legend()
 #%%
 #testing distribution
 stat, p_val = normaltest(df1.tree)
@@ -745,6 +745,7 @@ print(fit_park.summary())
 #%%
 # In order to do some data process, define a new dataframe. 
 df4 = df
+df4.head()
 #%%[markdown]
 # Before inferential analysis, we do some descriptive analysis. 
 #%%
@@ -835,23 +836,30 @@ print(fit41.summary())
 #
 # Here we can see from the coefficients that metro_station, tree and park are negative related to household_income, and bus_stops and public_school are positive related to household_income. 
 # 
-# However, take $\alpha=0.05$, the p-values of all variables are higher than 0.05, we fail to reject the null hypothesis. In this regression model analysis, all variables have no statistical significant effect on household income.
+# However, take $\alpha=0.05$, the p-values of public_school and park are higher than 0.05, we fail to reject the null hypothesis. The p-values of public_school and park are higher than 0.05, we fail to reject the null hypothesis. The p-values of bus_stops, metro_station and tree are less than 0.05, we reject the null hypothesis in favor of alternative hypothesis. 
+# 
+# In this regression model analysis, as bus_stops increases in 1 degree with other variables remain the same, the household income would increase in 9.1913 degree. In this regression model analysis, as metro_station increases in 1 degree with other variables remain the same, the household income would decrease in 10.9027 degree. In this regression model analysis, as tree increases in 1 degree with other variables remain the same, the household income would decrease in 0.0381 degree. 
 #%%[markdown]
-# Also from the boxplot about Household income vs public schools, we perform a ANOVA on it in order to learn whether there is any difference between areas whith different number of public schools. 
+# Also from the boxplot about Household income vs public schools, we perform a ANOVA on it in order to learn whether there is any difference between areas with different number of public schools. 
 # 
 # Before perform the ANOVA, we need to check if these four groups satisfy the normality and homoscedasticity. 
 #%%
-# Divide into four groups. 
+# Divide into five groups. 
+bool0 = df4['public_school']==0
 bool1 = df4['public_school']==1
 bool2 = df4['public_school']==2
 bool3 = df4['public_school']==3
 bool4 = df4['public_school']==4
 
+dfsch0 = df4[bool0]
 dfsch1 = df4[bool1]
 dfsch2 = df4[bool2]
 dfsch3 = df4[bool3]
 dfsch4 = df4[bool4]
 # %%
+sm.qqplot(dfsch0['Household_income'], fit=True, line='45')
+plt.show()
+
 sm.qqplot(dfsch1['Household_income'], fit=True, line='45')
 plt.show()
 
@@ -867,7 +875,7 @@ plt.show()
 # From the qqplot above, most points are distributed aroud the red line, thus we assume they satisfy the normality. 
 # %%
 from scipy.stats import levene
-p = levene(dfsch1['Household_income'],dfsch2['Household_income'],dfsch3['Household_income'],dfsch4['Household_income'])
+p = levene(dfsch0['Household_income'],dfsch1['Household_income'],dfsch2['Household_income'],dfsch3['Household_income'],dfsch4['Household_income'])
 print(p)
 #%%[markdown]
 # Null hypothesis: The variance for each groups is the same.   
@@ -886,11 +894,3 @@ print(anovschin)
 # Alternative hypothesis: At least one group has different mean income with other groups. 
 #
 # Take $\alpha=0.05$, in the ANOVA table above, p-value is higher than 0.05. In that case, we fail to reject the null hypothesis. I draw the conclusion that the number of public school would not have statistical significant effect on househould income. 
-
-
-
-
-
-
-
-# %%
