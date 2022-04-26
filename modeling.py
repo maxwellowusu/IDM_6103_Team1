@@ -69,11 +69,12 @@ from scipy.stats import normaltest
 # read geojosn data with geopandas
 df = gpd.read_file('./data/dataset.csv')
 print(df.head())
-df.fillna(0)
+df = df.fillna(0)
 
 #%%
 #This is only for Evelyn since some of the packages for the geojson ds are not working in her Mac
 df = pd.read_csv('./data/dataset.csv') #I am using the csv file that's why I commented the other one
+df = df.fillna(0)
 print(df.head())
 #%%
 df1 = df
@@ -659,7 +660,13 @@ df.plot(ax=axes, column='rf_pred', \
 plt.show()
 
 # print(rf.predict(x_test))
-#%%
+#%%[markdown]
+## Smart Question 2
+# Do regression for question 2: Does public infrastructure reduce green areas? 
+import statsmodels.api as sm
+fit2=sm.formula.ols('tree~Household_income+bus_stops+public_school+metro_station+park',data = df).fit()
+print(fit2.summary())
+
 #%%[markdown]
 ## Smart Question 3
 # Is there a relationship between distribution of infrastructure and socio-economic  and race groups?
