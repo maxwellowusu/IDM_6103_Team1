@@ -675,25 +675,46 @@ print(fit2.summary())
 # Calculate the ration of white_population to Total Population, and add it to a new column named race_ratio. 
 #%%
 df3 = df
-df3["race_ratio"]=df3[["White_population","Population"]].apply(lambda x:x["White_population"]/x["Population"],axis=1)
+df3["race_ratiowhite"]=df3[["White_population","Population"]].apply(lambda x:x["White_population"]/x["Population"],axis=1)
+df3["race_ratioblack"]=df3[["Black_population","Population"]].apply(lambda x:x["Black_population"]/x["Population"],axis=1)
+df3["race_ratiothers"]=df3[["race_ratiowhite","race_ratioblack"]].apply(lambda x:1-x["race_ratiowhite"]-x["race_ratioblack"],axis=1)
 df3.head()
 #%%
-# Build regression model between income and races: 
+# Build regression model between income and white poputlation: 
 import statsmodels.api as sm
-fit_income=sm.formula.ols('Household_income~race_ratio',data = df3).fit()
-print(fit_income.summary())
+fit_income31=sm.formula.ols('Household_income~race_ratiowhite',data = df3).fit()
+print(fit_income31.summary())
+#%%
+# Build regression model between income and black poputlation: 
+import statsmodels.api as sm
+fit_income32=sm.formula.ols('Household_income~race_ratioblack',data = df3).fit()
+print(fit_income32.summary())
+#%%
+# Build regression model between income and other poputlation: 
+import statsmodels.api as sm
+fit_income33=sm.formula.ols('Household_income~race_ratiothers',data = df3).fit()
+print(fit_income33.summary())
 #%%[markdown]
 # Null hypothesis: The coefficient of variables in regression model equals to 0.  
 # 
 # Alternative hypothesis: The coefficient of variables in regression model does not equal to 0. 
 # 
 # Take $\alpha=0.05$, the p-values of race ratio is less than 0.05, we reject the null hypothesis in favor of alternative hypothesis. The race ratio is negative ralated to household income. That as the white population increse, the household income would decrease. 
-
 #%%
-# Build regression model between bus_stops and races: 
+# Build regression model between bus stops and white poputlation: 
 import statsmodels.api as sm
-fit_bus=sm.formula.ols('bus_stops~race_ratio',data = df3).fit()
-print(fit_bus.summary())
+fit_bus31=sm.formula.ols('bus_stops~race_ratiowhite',data = df3).fit()
+print(fit_bus31.summary())
+#%%
+# Build regression model between bus stops and black poputlation: 
+import statsmodels.api as sm
+fit_bus32=sm.formula.ols('bus_stops~race_ratioblack',data = df3).fit()
+print(fit_bus32.summary())
+#%%
+# Build regression model between bus stops and other poputlation: 
+import statsmodels.api as sm
+fit_bus33=sm.formula.ols('bus_stops~race_ratiothers',data = df3).fit()
+print(fit_bus33.summary())
 #%%[markdown]
 # Null hypothesis: The coefficient of variables in regression model equals to 0.  
 # 
@@ -701,10 +722,20 @@ print(fit_bus.summary())
 # 
 # Take $\alpha=0.05$, the p-values of race ratio is higher than 0.05, we fail to reject the null hypothesis. The race ratio would not have statistical significant effect on bus stops. 
 #%%
-# Build regression model between public_school and races: 
+# Build regression model between public schools and white poputlation: 
 import statsmodels.api as sm
-fit_school=sm.formula.ols('public_school~race_ratio',data = df3).fit()
-print(fit_school.summary())
+fit_school31=sm.formula.ols('public_school~race_ratiowhite',data = df3).fit()
+print(fit_school31.summary())
+#%%
+# Build regression model between public schools and black poputlation: 
+import statsmodels.api as sm
+fit_school32=sm.formula.ols('public_school~race_ratioblack',data = df3).fit()
+print(fit_school32.summary())
+#%%
+# Build regression model between public schools and other poputlation: 
+import statsmodels.api as sm
+fit_school33=sm.formula.ols('public_school~race_ratiothers',data = df3).fit()
+print(fit_school33.summary())
 #%%[markdown]
 # Null hypothesis: The coefficient of variables in regression model equals to 0.  
 # 
@@ -712,10 +743,20 @@ print(fit_school.summary())
 # 
 # Take $\alpha=0.05$, the p-values of race ratio is higher than 0.05, we fail to reject the null hypothesis. The race ratio would not have statistical significant effect on the number of public schools. 
 #%%
-# Build regression model between metro_station and races: 
+# Build regression model between metro stations and white poputlation: 
 import statsmodels.api as sm
-fit_metro=sm.formula.ols('metro_station~race_ratio',data = df3).fit()
-print(fit_metro.summary())
+fit_metro31=sm.formula.ols('metro_station~race_ratiowhite',data = df3).fit()
+print(fit_metro31.summary())
+#%%
+# Build regression model between metro stations and black poputlation: 
+import statsmodels.api as sm
+fit_metro32=sm.formula.ols('metro_station~race_ratioblack',data = df3).fit()
+print(fit_metro32.summary())
+#%%
+# Build regression model between metro stations and other poputlation: 
+import statsmodels.api as sm
+fit_metro33=sm.formula.ols('metro_station~race_ratiothers',data = df3).fit()
+print(fit_metro33.summary())
 #%%[markdown]
 # Null hypothesis: The coefficient of variables in regression model equals to 0.  
 # 
@@ -723,10 +764,20 @@ print(fit_metro.summary())
 # 
 # Take $\alpha=0.05$, the p-values of race ratio is less than 0.05, we reject the null hypothesis in favor of alternative hypothesis. The race ratio is positive ralated to metro station. That as the white population increse, the metro station would also increse. 
 #%%
-# Build regression model between tree and races: 
+# Build regression model between trees and white poputlation: 
 import statsmodels.api as sm
-fit_tree=sm.formula.ols('tree~race_ratio',data = df3).fit()
-print(fit_tree.summary())
+fit_tree31=sm.formula.ols('tree~race_ratiowhite',data = df3).fit()
+print(fit_tree31.summary())
+#%%
+# Build regression model between trees and black poputlation: 
+import statsmodels.api as sm
+fit_tree32=sm.formula.ols('tree~race_ratioblack',data = df3).fit()
+print(fit_tree32.summary())
+#%%
+# Build regression model between trees and other poputlation: 
+import statsmodels.api as sm
+fit_tree33=sm.formula.ols('tree~race_ratiothers',data = df3).fit()
+print(fit_tree33.summary())
 #%%[markdown]
 # Null hypothesis: The coefficient of variables in regression model equals to 0.  
 # 
@@ -735,10 +786,20 @@ print(fit_tree.summary())
 # Take $\alpha=0.05$, the p-values of race ratio is higher than 0.05, we fail to reject the null hypothesis. The race ratio would not have statistical significant effect on the number of trees. 
 
 #%%
-# Build regression model between park and races: 
+# Build regression model between parks and white poputlation: 
 import statsmodels.api as sm
-fit_park=sm.formula.ols('park~race_ratio',data = df3).fit()
-print(fit_park.summary())
+fit_park31=sm.formula.ols('park~race_ratiowhite',data = df3).fit()
+print(fit_park31.summary())
+#%%
+# Build regression model between parks and black poputlation: 
+import statsmodels.api as sm
+fit_park32=sm.formula.ols('park~race_ratioblack',data = df3).fit()
+print(fit_park32.summary())
+#%%
+# Build regression model between parks and other poputlation: 
+import statsmodels.api as sm
+fit_park33=sm.formula.ols('park~race_ratiothers',data = df3).fit()
+print(fit_park33.summary())
 #%%[markdown]
 # Null hypothesis: The coefficient of variables in regression model equals to 0.  
 # 
