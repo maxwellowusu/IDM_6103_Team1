@@ -279,11 +279,12 @@ plt.show()
 # df.fillna(0)
 df1 =df.dropna()
 # Logistic model 
-x = df1[['Household_income', 'bus_stops', 'tree']]
+x = df1[['Household_income', 'bus_stops', 'metro_station','tree']]
 y = df1['Race']
 from sklearn.model_selection import train_test_split
 x_train, x_test, y_train, y_test = train_test_split(x, y, random_state=1 )
 
+#%%
 # logistric regression
 from sklearn.linear_model import LogisticRegression
 
@@ -292,7 +293,7 @@ logit.fit(x_train, y_train)
 print('Logit model accuracy (with the test set):', logit.score(x_test, y_test))
 print('Logit model accuracy (with the train set):', logit.score(x_train, y_train))
 #%%
-df['lg_pred'] = logit.predict(x)
+df1['lg_pred'] = logit.predict(x)
 #%%
 fig, axes = plt.subplots(figsize=(10, 10))
 axes.set_title("White and Black/Africa American in DC")
@@ -300,6 +301,7 @@ df.plot(ax=axes, column='lg_pred', \
              cmap=plt.cm.get_cmap('Dark2', 2).reversed(), legend=True,
              )
 plt.show()
+
 #%%
 
 #%%
@@ -311,7 +313,7 @@ rf.fit (x_train, y_train)
 print('Random forest model accuracy (with the test set):', rf.score(x_test, y_test))
 print('Random forest model accuracy (with the train set):', rf.score(x_train, y_train))
 #%%
-df['rf_pred'] = rf.predict(x)
+df1['rf_pred'] = rf.predict(x)
 #%%
 fig, axes = plt.subplots(figsize=(10, 10))
 axes.set_title("White and Black/Africa American in DC")
