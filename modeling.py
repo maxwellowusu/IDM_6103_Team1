@@ -67,9 +67,6 @@ from scipy.stats import chi2_contingency, chisquare
 df = gpd.read_file('./data/dataset.geojson')
 print(df.head())
 df.fillna(0)
-# %%
-
-df.plot()
 
 #%% [markdown]
 # Is there segregation in public infrastructure investment in the DC?
@@ -130,49 +127,6 @@ plot_infrastructure('metro_station','Metro stations count per census tracts', 'N
 # Parks
 plot_infrastructure('park', 'Park counts per census track', 'No Parks' )
 
-#%%
-
-# fig, axes = plt.subplots(figsize=(10, 10), sharex=True) 
-fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2, figsize=(12, 10))
-ax1.set_title('Publich school') 
-missing_kwds = dict(color='grey', label='No Public Schools')
-df.plot(ax=ax1, column= 'public_school', scheme='NaturalBreaks', k=5, \
-            cmap='YlOrRd', legend=True,
-            legend_kwds={'loc': 'center left', 'bbox_to_anchor':(1,0.5),'interval': True},
-            missing_kwds = missing_kwds
-         )
- 
-ax2.set_title('Bus Stops') 
-df.plot(ax=ax2, column= 'bus_stops', scheme='NaturalBreaks', k=5, \
-            cmap='YlOrRd', legend=True,
-            legend_kwds={'loc': 'center left', 'bbox_to_anchor':(1,0.5),'interval': True},
-            
-         )
- 
-ax3.set_title('Metro Station') 
-missing_kwds = dict(color='grey', label='No Metro Station')
-df.plot(ax=ax3, column= 'metro_station', scheme='NaturalBreaks', k=5, \
-            cmap='YlOrRd', legend=True,
-            legend_kwds={'loc': 'center left', 'bbox_to_anchor':(1,0.5),'interval': True},
-            missing_kwds = missing_kwds
-         )
-
-ax4.set_title('Park') 
-missing_kwds = dict(color='grey', label='No Parks')
-df.plot(ax=ax4, column= 'park', scheme='NaturalBreaks', k=5, \
-            cmap='YlOrRd', legend=True,
-            legend_kwds={'loc': 'center left', 'bbox_to_anchor':(1,0.5),'interval': True},
-            missing_kwds = missing_kwds
-         )
-
-for ax in fig.get_axes():
-    ax.label_outer()
-plt.savefig('./output/infrasture.jpeg')
-
-#%%
-
-
-
 
 #%%
 # plot Census variables 
@@ -204,79 +158,8 @@ df.plot(ax=axes, column= 'Household_income', scheme='NaturalBreaks', k=5, \
 plt.savefig('./output/Household_income.jpeg') 
 plt.show()
 
-#%%
-# df.fillna(0)
-df1 =df.dropna()
-# Logistic model 
-x = df1[['Household_income', 'bus_stops', 'tree']]
-y = df1['Race']
-from sklearn.model_selection import train_test_split
-x_train, x_test, y_train, y_test = train_test_split(x, y, random_state=1 )
-
-# logistric regression
-from sklearn.linear_model import LogisticRegression
-
-logit = LogisticRegression()  # instantiate
-logit.fit(x_train, y_train)
-print('Logit model accuracy (with the test set):', logit.score(x_test, y_test))
-print('Logit model accuracy (with the train set):', logit.score(x_train, y_train))
-#%%
-df['lg_pred'] = logit.predict(x)
-#%%
-fig, axes = plt.subplots(figsize=(10, 10))
-axes.set_title("White and Black/Africa American in DC")
-df.plot(ax=axes, column='lg_pred', \
-             cmap=plt.cm.get_cmap('Dark2', 2).reversed(), legend=True,
-             )
-plt.show()
-#%%
 
 #%%
-# Radnom forest
-from sklearn.ensemble import RandomForestClassifier
-rf = RandomForestClassifier(n_estimators=1000, random_state = 0)
-
-rf.fit (x_train, y_train)
-print('Random forest model accuracy (with the test set):', rf.score(x_test, y_test))
-print('Random forest model accuracy (with the train set):', rf.score(x_train, y_train))
-#%%
-df['rf_pred'] = rf.predict(x)
-#%%
-fig, axes = plt.subplots(figsize=(10, 10))
-axes.set_title("White and Black/Africa American in DC")
-df.plot(ax=axes, column='rf_pred', \
-             cmap=plt.cm.get_cmap('Dark2', 2).reversed(), legend=True,
-             )
-plt.show()
-
-# print(rf.predict(x_test))
-#%%
-
-
-#%%
-# Parks
-plot_infrastructure('park', 'Park counts per census track', 'No Parks' )
-
-#%%
-# plot Census variables 
-
-# Assume predominant race in the census tract 
-df.loc[df['White_population'] > df['Black_population'], 'Race'] = 'White'
-df.loc[df['White_population'] < df['Black_population'], 'Race'] = 'Black_Africa'
-print(df.head())
-
-#%%
-fig, axes = plt.subplots(figsize=(10, 10))
-axes.set_title("White and Black/Africa American in DC")
-df.plot(ax=axes, column='Race', \
-             cmap=plt.cm.get_cmap('Dark2', 2).reversed(), legend=True,
-             )
-plt.show()
-
-# Visually there is seems to be clusters of race in DC. 
-
-#%%
-# df.fillna(0)
 df1 =df.dropna()
 # Logistic model 
 x = df1[['Household_income', 'bus_stops', 'metro_station','tree']]
@@ -293,19 +176,13 @@ logit.fit(x_train, y_train)
 print('Logit model accuracy (with the test set):', logit.score(x_test, y_test))
 print('Logit model accuracy (with the train set):', logit.score(x_train, y_train))
 #%%
-df1['lg_pred'] = logit.predict(x)
-#%%
-fig, axes = plt.subplots(figsize=(10, 10))
-axes.set_title("White and Black/Africa American in DC")
-df.plot(ax=axes, column='lg_pred', \
-             cmap=plt.cm.get_cmap('Dark2', 2).reversed(), legend=True,
-             )
-plt.show()
+# df1['lg_pred'] = logit.predict(x)
+
 
 #%%
 
 #%%
-# Radnom forest
+# Random forest
 from sklearn.ensemble import RandomForestClassifier
 rf = RandomForestClassifier(n_estimators=1000, random_state = 0)
 
@@ -313,16 +190,9 @@ rf.fit (x_train, y_train)
 print('Random forest model accuracy (with the test set):', rf.score(x_test, y_test))
 print('Random forest model accuracy (with the train set):', rf.score(x_train, y_train))
 #%%
-df1['rf_pred'] = rf.predict(x)
+# df1['rf_pred'] = rf.predict(x)
 #%%
-fig, axes = plt.subplots(figsize=(10, 10))
-axes.set_title("White and Black/Africa American in DC")
-df.plot(ax=axes, column='rf_pred', \
-             cmap=plt.cm.get_cmap('Dark2', 2).reversed(), legend=True,
-             )
-plt.show()
 
-# print(rf.predict(x_test))
 #%%
 #%%[markdown]
 ## Smart Question 3
