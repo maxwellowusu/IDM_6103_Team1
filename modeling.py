@@ -173,7 +173,7 @@ xq = np.arange(df1.metro_station.min(), df1.metro_station.max(), 0.1)
 fit2 = stats.norm.pdf(xq, np.mean(df.metro_station), np.std(df1.metro_station))
 plt.plot(xq, fit2, label='Normal Dist.', lw=3)
 plt.hist(df1.metro_station, 50, density=True, label='Actual Data');
-plt.legend();
+plt.legend()
 #%%
 #testing distribution
 stat, p_val = normaltest(df1.metro_station)
