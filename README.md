@@ -15,7 +15,7 @@ These instructions will help to replicate the workflow
 ##### 1. data preprocessing 
 This script is used to connects to API, downloads and processed data into census tract. save as csv and geojson. 
 ##### 2. modeling
-This script is used to EDA, visualisation and modeling. 
+This script is used for EDA, visualisation and modeling. 
 
 ## Required software and packages
 pandas
