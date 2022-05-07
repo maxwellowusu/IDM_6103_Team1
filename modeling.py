@@ -67,7 +67,7 @@ from scipy.stats import normaltest
 
 #%%
 # read geojosn data with geopandas
-df = gpd.read_file('./data/dataset.csv')
+df = gpd.read_file('./data/dataset.geojson')
 print(df.head())
 df = df.fillna(0)
 
@@ -173,7 +173,7 @@ xq = np.arange(df1.metro_station.min(), df1.metro_station.max(), 0.1)
 fit2 = stats.norm.pdf(xq, np.mean(df.metro_station), np.std(df1.metro_station))
 plt.plot(xq, fit2, label='Normal Dist.', lw=3)
 plt.hist(df1.metro_station, 50, density=True, label='Actual Data');
-plt.legend()
+plt.legend();
 #%%
 #testing distribution
 stat, p_val = normaltest(df1.metro_station)
@@ -410,20 +410,15 @@ print('zscore:', zScore, 'p-value:', pValue)
 zScore, pValue = ztest(df1['park'], df1['public_school'])
 print('zscore:', zScore, 'p-value:', pValue)
 
-
-
-
-
-
-
-
-
-
-
-
 #%% [markdown]
 # Is there segregation in public infrastructure investment in the DC?
 
+# read geojosn data with geopandas
+df = gpd.read_file('./data/dataset.geojson')
+print(df.head())
+# df = df.fillna(0)
+
+#%%
 # plot Bus stops 
 fig, axes = plt.subplots(figsize=(10, 10), sharex=True)  
 axes.set_title('Bus stops counts per census tracts') 
@@ -480,6 +475,19 @@ plot_infrastructure('metro_station','Metro stations count per census tracts', 'N
 # Parks
 plot_infrastructure('park', 'Park counts per census track', 'No Parks' )
 
+#%%
+
+fig, axes = plt.subplots(figsize=(10, 10), sharex=True)  
+axes.set_title('title') 
+missing_kwds = dict(color='grey', label='missing_data')
+df.plot(ax=axes, column= 'park', scheme='NaturalBreaks', k=5, \
+            cmap='YlOrRd', legend=True,
+            legend_kwds={'loc': 'center left', 'bbox_to_anchor':(1,0.5),'interval': True},
+            missing_kwds = missing_kwds
+        )
+# outfile = f'./output/{variable}.jpeg'
+# plt.savefig(outfile)
+plt.show()
 
 #%%
 # plot Census variables 
