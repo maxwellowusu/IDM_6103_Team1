@@ -104,7 +104,8 @@ plt.show()
 
 #%%  
 #Scatterplot 
-sns.pairplot(df1, x_vars=['bus_stops','public_school', 'metro_station'], y_vars=['Black_population', 'White_population'], hue='Population', height=1.5)
+sns.pairplot(df1, x_vars=['bus_stops','public_school', 'metro_station'], y_vars=['Black_population', 'White_population'],
+            hue='Population', height=1.5)
 plt.show()
 #%% 
 #Looking at the correlation
@@ -122,7 +123,7 @@ def check_p_val(p_val, alpha):
  else:
    print('We do not have evidence to reject the null hypothesis.')
 #%%
-#Plotting normal distribution bus stops
+#Plotting normal distribution bus stops. I DIDN'T USE THIS GRAPH ON THE PRESENTATION
 xs = np.arange(df1.bus_stops.min(), df1.bus_stops.max(), 0.1)
 fit = stats.norm.pdf(xs, np.mean(df1.bus_stops), np.std(df1.bus_stops))
 plt.plot(xs, fit, label='Normal Dist.', lw=3)
@@ -160,7 +161,7 @@ def check_p_val(p_val, alpha):
  else:
    print('We do not have evidence to reject the null hypothesis.')
 #%%
-#Normal distribution for metro stations
+#Plotting normal distribution for metro stations
 xq = np.arange(df1.metro_station.min(), df1.metro_station.max(), 0.1)
 fit2 = stats.norm.pdf(xq, np.mean(df.metro_station), np.std(df1.metro_station))
 plt.plot(xq, fit2, label='Normal Dist.', lw=3)
@@ -303,6 +304,8 @@ print('zscore:', zScore, 'p-value:', pValue)
 # park public school
 zScore, pValue = ztest(df1['park'], df1['public_school'])
 print('zscore:', zScore, 'p-value:', pValue)
+
+
 #EDA SMART QUESTION 3
 #Is there a relationship between distribution of infrastructure, socioeconomic, and race groups?
 #Descriptive statistics
@@ -321,7 +324,7 @@ sns.histplot(data=df1, x="public_school", kde=True, color="olive", ax=axs[0, 1])
 sns.histplot(data=df1, x="metro_station", kde=True, color="gold", ax=axs[0, 2])
 sns.histplot(data=df1, x="tree", kde=True, color="teal", ax=axs[1, 0])
 sns.histplot(data=df1, x="park", kde=True, color="purple", ax=axs[1, 1])
-sns.histplot(data=df1, x="Household_income", kde=True, color="pink", ax=axs[1, 2])
+sns.histplot(data=df1, x="Household_income", kde=True, color="olive", ax=axs[1, 2])
 plt.show()
 #%%    
 #Scatterplot
@@ -335,8 +338,9 @@ df1_corr2 = df1[['bus_stops', 'tree', 'Household_income','park','public_school',
 df1_corr2
 #%% 
 sns.heatmap(df1_corr2, annot=True)
-#END OF EDA SMART QUESTION 2
-#DISTRIBUTIONS AND TESTS SMART Q2
+#CHECK IF THIS IS THERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+#END OF EDA SMART QUESTION 3
+#DISTRIBUTIONS AND TESTS SMART Q3
 #%%
 def check_p_val(p_val, alpha):
  if p_val < alpha:
@@ -401,6 +405,10 @@ print('zscore:', zScore, 'p-value:', pValue)
 # park public school
 zScore, pValue = ztest(df1['park'], df1['public_school'])
 print('zscore:', zScore, 'p-value:', pValue)
+#END OF DISTRIBUTIONS AND TESTS SMART Q3
+
+
+
 
 #%% [markdown]
 # Is there segregation in public infrastructure investment in the DC?
