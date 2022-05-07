@@ -21,12 +21,21 @@ import scipy.stats as stats
 from scipy.stats import normaltest
 # import contextily as ctx
 
-# import contextily as ctx
-#%% 
+#%% [markdown]
 
+# # Part 2: Modeling
+# We perform exploratory data analysis, visualisation and modeling to help aachieved our objectives. 
 
-# Data sources
+# ## Objectives 
+# - Is there segregation in public investment in D.C.?
+# - Does public infrastructure reduce green areas? 
+# - Is there a relationship between distribution of infrastructure, socioeconomic, and race groups?
+# - How are people of different economic status affected by infrastructure development?
 
+#%% [markdown]
+#  ## Data sources
+
+# ## Selected infrastructure
 # | Variable Name | Variable URL |
 # | :-: | :-: |
 # | Income census data | https://api.census.gov/data/2017/acs/acs1/groups/B25074.html |
@@ -35,7 +44,6 @@ from scipy.stats import normaltest
 # | Metro Station | https://opendata.arcgis.com/datasets/ab5661e1a4d74a338ee51cd9533ac787_50.geojson |
 # | DC buildings | https://opendata.arcgis.com/datasets/8ffa9109cd9a4e37982cea67b289784d_0.geojson |
 
-#%% [markdown]
 # ## Census variables 
 
 # link to census ID and description
@@ -48,21 +56,6 @@ from scipy.stats import normaltest
 # | B25074_020E | Household income by gross rent as a percentage of household in the past 12 months |
 # | B01003_001E | Total population |
 
-# census variables
-
-#%%
-# Population :
-# White population :
-# Black population :
-# Household income :
-
-# selected infrastructure 
-
-# Bus stops :
-# Public schools :
-# Metro station :
-# Trees :
-# Parks :
 
 
 #%%
@@ -111,8 +104,7 @@ plt.show()
 
 #%%  
 #Scatterplot 
-sns.pairplot(df1, y_vars=['bus_stops','public_school', 'metro_station'], y_vars=['Black_population', 'White_population'],
-            hue='Population', height=1.5)
+sns.pairplot(df1, x_vars=['bus_stops','public_school', 'metro_station'], y_vars=['Black_population', 'White_population'], hue='Population', height=1.5)
 plt.show()
 #%% 
 #Looking at the correlation
@@ -519,63 +511,6 @@ df.plot(ax=axes, column= 'Household_income', scheme='NaturalBreaks', k=5, \
 plt.savefig('./output/Household_income.jpeg') 
 plt.show()
 
-
-#%%
-df1 =df.dropna()
-# Logistic model 
-x = df1[['Household_income', 'bus_stops', 'metro_station','tree']]
-y = df1['Race']
-from sklearn.model_selection import train_test_split
-x_train, x_test, y_train, y_test = train_test_split(x, y, random_state=1 )
-
-#%%
-# logistric regression
-from sklearn.linear_model import LogisticRegression
-
-logit = LogisticRegression()  # instantiate
-logit.fit(x_train, y_train)
-print('Logit model accuracy (with the test set):', logit.score(x_test, y_test))
-print('Logit model accuracy (with the train set):', logit.score(x_train, y_train))
-#%%
-# df1['lg_pred'] = logit.predict(x)
-
-
-#%%
-
-#%%
-# Random forest
-from sklearn.ensemble import RandomForestClassifier
-rf = RandomForestClassifier(n_estimators=1000, random_state = 0)
-
-rf.fit (x_train, y_train)
-print('Random forest model accuracy (with the test set):', rf.score(x_test, y_test))
-print('Random forest model accuracy (with the train set):', rf.score(x_train, y_train))
-#%%
-# df1['rf_pred'] = rf.predict(x)
-#%%
-
-#%%
-
-#%%
-# Parks
-plot_infrastructure('park', 'Park counts per census track', 'No Parks' )
-
-#%%
-# plot Census variables 
-
-# Assume predominant race in the census tract 
-df.loc[df['White_population'] > df['Black_population'], 'Race'] = 'White'
-df.loc[df['White_population'] < df['Black_population'], 'Race'] = 'Black_Africa'
-print(df.head())
-
-#%%
-fig, axes = plt.subplots(figsize=(10, 10))
-axes.set_title("White and Black/Africa American in DC")
-df.plot(ax=axes, column='Race', \
-             cmap=plt.cm.get_cmap('Dark2', 2).reversed(), legend=True,
-             )
-plt.show()
-
 # Visually there is seems to be clusters of race in DC. 
 
 #%%
@@ -594,16 +529,6 @@ logit = LogisticRegression()  # instantiate
 logit.fit(x_train, y_train)
 print('Logit model accuracy (with the test set):', logit.score(x_test, y_test))
 print('Logit model accuracy (with the train set):', logit.score(x_train, y_train))
-#%%
-df['lg_pred'] = logit.predict(x)
-#%%
-fig, axes = plt.subplots(figsize=(10, 10))
-axes.set_title("White and Black/Africa American in DC")
-df.plot(ax=axes, column='lg_pred', \
-             cmap=plt.cm.get_cmap('Dark2', 2).reversed(), legend=True,
-             )
-plt.show()
-#%%
 
 #%%
 # Radnom forest
@@ -613,17 +538,7 @@ rf = RandomForestClassifier(n_estimators=1000, random_state = 0)
 rf.fit (x_train, y_train)
 print('Random forest model accuracy (with the test set):', rf.score(x_test, y_test))
 print('Random forest model accuracy (with the train set):', rf.score(x_train, y_train))
-#%%
-df['rf_pred'] = rf.predict(x)
-#%%
-fig, axes = plt.subplots(figsize=(10, 10))
-axes.set_title("White and Black/Africa American in DC")
-df.plot(ax=axes, column='rf_pred', \
-             cmap=plt.cm.get_cmap('Dark2', 2).reversed(), legend=True,
-             )
-plt.show()
 
-# print(rf.predict(x_test))
 #%%[markdown]
 ## Smart Question 2
 # Do regression for question 2: Does public infrastructure reduce green areas? 

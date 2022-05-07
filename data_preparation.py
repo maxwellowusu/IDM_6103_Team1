@@ -2,7 +2,8 @@
 # coding: utf-8
 
 #%% [markdown]
-
+# # Part 1: Data pre-processing 
+# This script is used to download data from different APIs. it will then join the different data sources using pandas join and geopandas spatial joins. The reason is becuase some of the data sourcs does not have a unique identifier. Spatial joins was used to merge them. 
 # ## Project Data Preparation
 
 # Data sources
@@ -15,7 +16,6 @@
 # | Metro Station | https://opendata.arcgis.com/datasets/ab5661e1a4d74a338ee51cd9533ac787_50.geojson |
 # | DC buildings | https://opendata.arcgis.com/datasets/8ffa9109cd9a4e37982cea67b289784d_0.geojson |
 
-#%% [markdown]
 # ## Census variables 
 
 # link to census ID and description
@@ -44,6 +44,8 @@ import contextily as ctx
 import seaborn as sns
 sns.set_theme(style='darkgrid')
 
+#%% [markdown]
+# ## Download GIS data from Open Data DC API
 #%%
 # Download street from open data DC
 
@@ -57,7 +59,6 @@ ax = bus_stops.plot(figsize=(10, 10), alpha=0.5, edgecolor='k')
 ctx.add_basemap(ax, crs=bus_stops.crs)
 
 #%%
-
 # Download schools from open data DC
 
 public_schools = gpd.read_file('https://opendata.arcgis.com/datasets/4ac321b2d409438ebd76a6569ad94034_5.geojson')
@@ -101,6 +102,8 @@ ctx.add_basemap(ax, crs=parks.crs)
 
 ############################ end of GIS data download ###############
 
+#%% [markdown]
+# ## Download Census data from American Community Survey (ACS) API 
 #%%
 # Download census data 
 session = Census("808b8bdd29d3424881a13740265bdf2c3d7b0980") # Please get a Census API key from https://api.census.gov/data/key_signup.html
@@ -123,6 +126,8 @@ variable_dict = {'B01003_001E': 'Population','B02001_002E':'White_population', '
 dc_df.rename(columns=variable_dict, inplace=True)
 dc_df.head()
 
+#%% [markdown]
+# ## Download census tract shapefile from TIGER. 
 #%%
 # wget to download tiger shapefile (DC census tract)
 # ! wget https://www2.census.gov/geo/tiger/TIGER2017/TRACT/tl_2017_11_tract.zip 
@@ -147,14 +152,14 @@ dc_shp.head(2)
 dc_df.loc[:,"GEOID"] = dc_df["state"] + dc_df["county"] + dc_df["tract"]
 dc_df["GEOID"] 
 
-# merge data (tiger shapefile and census variables) 
+# merge data (tiger shapefile and census variables) using pandas merge
 dc_join = dc_shp.merge(right=dc_df, how='left',on='GEOID', validate='one_to_one')
 dc_join.head()
 
-# %%
+# %% [markdown]
+# ## Lets join the seleted infrastructure to the dataframe using geopands spatial join.
 
-# # Lets join the seleted infrastructure to the dataframe.
-
+#%%
 # join census data and street trees shapefile
 # First, we spatial join the two data and group the number of infrastructure points (count) to the census tract
 bus_stops.to_crs("EPSG:32618", inplace=True)
@@ -247,10 +252,15 @@ park.head()
 #merge groupby and DC_census track
 bus_sch_metro_trees_parks_merge = bus_sch_metro_trees_merge.merge(right=park, how='left',on='GEOID', validate='one_to_one')
 bus_sch_metro_trees_parks_merge.head()
-# %%
+# %% [makrdown]
+# ## Save results to gwojson and csv for analysis
+#%% 
 outfile = './data/dataset.geojson'
 bus_sch_metro_trees_parks_merge.to_file(outfile, driver='GeoJSON')
 # %%
 output_csv = './data/dataset.csv'
 bus_sch_metro_trees_parks_merge.to_csv(output_csv, sep=',', header=True)
+# %% [markdown]
+
+# # End of part 1
 # %%
