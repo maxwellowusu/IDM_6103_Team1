@@ -619,9 +619,15 @@ plt.show()
 #%%[markdown]
 ## Smart Question 2
 # Do regression for question 2: Does public infrastructure reduce green areas? 
+#%%
 import statsmodels.api as sm
 fit2=sm.formula.ols('tree~Household_income+bus_stops+public_school+metro_station+park',data = df).fit()
 print(fit2.summary())
+#%%[markdown]
+# The null hypothesis for t-test is that the coefficient of variable equals 0, and the alternative hypothesis is that the coefficient of variable does not equal 0. Take α = 0.05, the p-values of all independent variables are small, thus we reject the null hypothesis in favor of the alternative hypothesis, which means that all independent variables are statistically significant related to tree. 
+#
+# The coefficient shows that if household income increases in 1 degree with other conditions unchanged, tree would decrease in 1.1242 degrees. Similarly, if metro station increases in 1 degree, tree would decrease in 123.2558 degrees. If bus stops , public school and park increase in 1 degree respectively with other conditions unchanged, tree would increase in 39.1363, 95.9743 and 142.8544 degrees. 
+
 
 #%%[markdown]
 ## Smart Question 3
@@ -655,7 +661,9 @@ print(fit_income33.summary())
 # 
 # Alternative hypothesis: The coefficient of variables in regression model does not equal to 0. 
 # 
-# Take $\alpha=0.05$, the p-values of race ratio is less than 0.05, we reject the null hypothesis in favor of alternative hypothesis. The race ratio is negative ralated to household income. That as the white population increse, the household income would decrease. 
+# Take $\alpha=0.05$, if white ratio increases by 1% with other conditions unchanged, household income would decrease by about 1.52 degree.  If black ratio increases by 1% with other conditions unchanged, household income would increase by about 1.30 degrees. Other populations would not have a significant effect on income. 
+
+
 #%%
 # Build regression model between bus stops and white poputlation: 
 import statsmodels.api as sm
@@ -676,7 +684,8 @@ print(fit_bus33.summary())
 # 
 # Alternative hypothesis: The coefficient of variables in regression model does not equal to 0. 
 # 
-# Take $\alpha=0.05$, the p-values of race ratio is higher than 0.05, we fail to reject the null hypothesis. The race ratio would not have statistical significant effect on bus stops. 
+# Take $\alpha=0.05$, race groups have no significant effect on bus stops. 
+
 #%%
 # Build regression model between public schools and white poputlation: 
 import statsmodels.api as sm
@@ -697,7 +706,8 @@ print(fit_school33.summary())
 # 
 # Alternative hypothesis: The coefficient of variables in regression model does not equal to 0. 
 # 
-# Take $\alpha=0.05$, the p-values of race ratio is higher than 0.05, we fail to reject the null hypothesis. The race ratio would not have statistical significant effect on the number of public schools. 
+# Take $\alpha=0.05$, race groups have no significant effect on public school.
+
 #%%
 # Build regression model between metro stations and white poputlation: 
 import statsmodels.api as sm
@@ -718,7 +728,8 @@ print(fit_metro33.summary())
 # 
 # Alternative hypothesis: The coefficient of variables in regression model does not equal to 0. 
 # 
-# Take $\alpha=0.05$, the p-values of race ratio is less than 0.05, we reject the null hypothesis in favor of alternative hypothesis. The race ratio is positive ralated to metro station. That as the white population increse, the metro station would also increse. 
+# Take $\alpha=0.05$, if white ratio increases by 1% with other conditions unchanged, metro stations would increase by about 0.01 degrees. If black ratio increases by 1% with other conditions unchanged, metro stations would decrease by about 0.01 degrees. Other populations would not have a significant effect on the number of metro stations. 
+
 #%%
 # Build regression model between trees and white poputlation: 
 import statsmodels.api as sm
@@ -739,7 +750,7 @@ print(fit_tree33.summary())
 # 
 # Alternative hypothesis: The coefficient of variables in regression model does not equal to 0. 
 # 
-# Take $\alpha=0.05$, the p-values of race ratio is higher than 0.05, we fail to reject the null hypothesis. The race ratio would not have statistical significant effect on the number of trees. 
+# Take $\alpha=0.05$, the p-values of race ratio is higher than 0.05, race groups have no significant effect on trees.  
 
 #%%
 # Build regression model between parks and white poputlation: 
@@ -761,7 +772,7 @@ print(fit_park33.summary())
 # 
 # Alternative hypothesis: The coefficient of variables in regression model does not equal to 0. 
 # 
-# Take $\alpha=0.05$, the p-values of race ratio is higher than 0.05, we fail to reject the null hypothesis. The race ratio would not have statistical significant effect on the number of parks. 
+# Take $\alpha=0.05$, race groups have no significant effect on the number of parks. 
 
 #%%[markdown]
 ## Smart Question 4
