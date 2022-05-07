@@ -17,6 +17,7 @@ This script is used to connects to API, downloads and processed data into census
 ##### 2. modeling
 This script is used for EDA, visualisation and modeling. 
 
+
 ## Required software and packages
 pandas
 geopandas
