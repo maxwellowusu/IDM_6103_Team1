@@ -116,6 +116,7 @@ df_corr
 sns.heatmap(df_corr, annot=True)
 #END OF EDA SMART QUESTION 1 
 #DISTRIBUTIONS AND TESTS SMART Q1
+#%%
 #Normal distribution for bus stops
 def check_p_val(p_val, alpha):
  if p_val < alpha:
